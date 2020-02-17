@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2020-02-06" />
+
+<title>Getting Started with osfr</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting Started with osfr</h1>
+<h4 class="date">2020-02-06</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#what-is-osf">What is OSF?</a></li>
+<li><a href="#accessing-osf-projects">Accessing OSF projects</a>
+<ul>
+<li><a href="#downloading-files">Downloading files</a></li>
+<li><a href="#pipes">Pipes</a></li>
+</ul></li>
+<li><a href="#project-management">Project management</a>
+<ul>
+<li><a href="#creating-a-project">Creating a project</a></li>
+<li><a href="#adding-structure-with-components">Adding structure with components</a></li>
+<li><a href="#uploading-files">Uploading files</a></li>
+<li><a href="#putting-it-all-together">Putting it all together</a></li>
+<li><a href="#updating-files">Updating files</a></li>
+<li><a href="#sharing">Sharing</a></li>
+</ul></li>
+<li><a href="#a-few-details-about-files-on-osf">A few details about files on OSF</a></li>
+<li><a href="#additional-resources">Additional resources</a></li>
+</ul>
+</div>
+
+<p>This vignette provides a quick tour of the <em>osfr</em> package.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(osfr)</span></code></pre></div>
+<div id="what-is-osf" class="section level2">
+<h2>What is OSF?</h2>
+<p><a href="https://osf.io">OSF</a> is a free and open source web application that provides a space for researchers to collaboratively store, manage, and share their research materials (e.g. data, code, protocols).</p>
+<p>Most work on OSF is organized around <strong><em>projects</em></strong>, which include a cloud-based storage bucket where files can be stored and organized into directories. Note there is no storage limit on the size of projects but individual files must be &lt; 5Gb. Projects can be kept private, shared with a specific group of collaborators, or made publicly available with citable DOIs so you can get credit for their work.</p>
+<p>If you’d like to learn more about OSF the Center for Open Science has published an excellent series of <a href="http://help.osf.io/">guides</a> to help get you started. We’ll provide links to specific guides throughout this vignette. Here are a few relevant topics:</p>
+<ul>
+<li><a href="https://help.osf.io/hc/en-us/categories/360001495973-Creating-and-Managing-Projects">Creating and Managing Projects</a></li>
+<li><a href="https://help.osf.io/hc/en-us/articles/360019737614-Create-Components">Adding sub-projects (i.e., components) to a project</a></li>
+<li><a href="https://help.osf.io/hc/en-us/articles/360019737774-Edit-Contributor-Permissions">Understanding project permissions</a></li>
+</ul>
+</div>
+<div id="accessing-osf-projects" class="section level2">
+<h2>Accessing OSF projects</h2>
+<p>Let’s check out an example project containing materials for an analysis of the 2012 American National Election Survey (ANES). You can access the OSF project in your browser by navigating to its URL: <a href="https://osf.io/jgyxm/" class="uri">https://osf.io/jgyxm/</a>.</p>
+<p>Let’s load this project into R with <code>osfr::osf_retrieve_node()</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>anes_project &lt;-<span class="st"> </span><span class="kw">osf_retrieve_node</span>(<span class="st">&quot;https://osf.io/jgyxm&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>anes_project</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; # A tibble: 1 x 3</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;   name                                id    meta            </span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;   &lt;chr&gt;                               &lt;chr&gt; &lt;list&gt;          </span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; 1 Political identification and gender jgyxm &lt;named list [3]&gt;</span></span></code></pre></div>
+<p>This returns an <code>osf_tbl</code> object, which is the <code>data.frame</code>-like class <em>osfr</em> uses to represent items retrieved from OSF. You can now use <code>anes_project</code> to perform a variety of project related tasks by passing it to different osfr functions.</p>
+<div id="downloading-files" class="section level3">
+<h3>Downloading files</h3>
+<p>Let’s list all of the files that have been uploaded to the project:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>anes_files &lt;-<span class="st"> </span><span class="kw">osf_ls_files</span>(anes_project)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>anes_files</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt;   name                 id                       meta            </span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt;   &lt;chr&gt;                &lt;chr&gt;                    &lt;list&gt;          </span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; 1 cleaning.R           5e20d22bedceab002d82e0f1 &lt;named list [3]&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; 2 Questionnaire.docx   5e20d22bedceab002b82dc3f &lt;named list [3]&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; 3 raw_data.csv         5e20d22c675e0e00096b4de8 &lt;named list [3]&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; 4 Data Dictionary.docx 5e20d22c675e0e000e6b4b18 &lt;named list [3]&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; 5 analyses.R           5e20d22c675e0e000a6b4bd3 &lt;named list [3]&gt;</span></span></code></pre></div>
+<p>This returns another <code>osf_tbl</code> but this one contains 5 rows; one for each of the project <em>files</em> stored on OSF. A nice feature of OSF is it provides rendered views for a wide variety of file formats, so it’s not necessary to actually download and open a file if you just want to quickly examine it. Let’s open the Word Document containing the project’s data dictionary by extracting the relevant row from <code>anes_tbl</code> and passing it to <code>osf_open()</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">osf_open</span>(anes_files[<span class="dv">4</span>, ])</span></code></pre></div>
+<p>Because <code>osf_tbl</code>s are just specialized <code>data.frame</code>s, we could also <code>subset()</code> or <code>dplyr::filter()</code> to achieve the same result.</p>
+<p><em><strong>Note:</strong> If an <code>osf_tbl</code> with multiple entities is passed to an non-vectorized osfr function like <code>osf_open()</code>, the default behavior is to use the entity in the first row and warn that all other entities are ignored.</em></p>
+<p>We can also download local copies of these files by passing <code>anes_files</code> to <code>osf_download()</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">osf_download</span>(anes_files)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; # A tibble: 5 x 4</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt;   name                id                     local_path           meta          </span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;   &lt;chr&gt;               &lt;chr&gt;                  &lt;chr&gt;                &lt;list&gt;        </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; 1 cleaning.R          5e20d22bedceab002d82e… ./cleaning.R         &lt;named list […</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; 2 Questionnaire.docx  5e20d22bedceab002b82d… ./Questionnaire.docx &lt;named list […</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; 3 raw_data.csv        5e20d22c675e0e00096b4… ./raw_data.csv       &lt;named list […</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; 4 Data Dictionary.do… 5e20d22c675e0e000e6b4… ./Data Dictionary.d… &lt;named list […</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; 5 analyses.R          5e20d22c675e0e000a6b4… ./analyses.R         &lt;named list […</span></span></code></pre></div>
+<p>We’ll use these files in the next section for creating a new project.</p>
+</div>
+<div id="pipes" class="section level3">
+<h3>Pipes</h3>
+<p>As you’ve likely noticed, <code>osf_tbl</code> objects are central to osfr’s functionality. Indeed, nearly all of its functions both expect an <code>osf_tbl</code> as input and return an <code>osf_tbl</code> as output. As such, osfr functions can be chained together using the <a href="https://magrittr.tidyverse.org">pipe operator</a> (<code>%&gt;%</code>), allowing for the creation of pipelines to automate OSF-based tasks.</p>
+<p>Here is a short example that consolidates all of the steps we’ve performed so far:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">osf_retrieve_node</span>(<span class="st">&quot;jgyxm&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">osf_ls_files</span>() <span class="op">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">osf_download</span>()</span></code></pre></div>
+</div>
+</div>
+<div id="project-management" class="section level2">
+<h2>Project management</h2>
+<p>Now let’s see how to use osfr to create and manage your own projects. The goal for this section is to create your own version of the <em>Political Identification and Gender</em> project but with a better organizational structure. To follow along with this section you’ll need to authenticate osfr using a personal access token (PAT). See the <code>?osf_auth()</code> function documentation or the <code>auth</code> vignette for more information.</p>
+<div id="creating-a-project" class="section level3">
+<h3>Creating a project</h3>
+<p>First you will need to create a new private project on OSF to store all the files related to the project. Here, we’re giving the new project a title (required) and description (optional).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>my_project &lt;-<span class="st"> </span><span class="kw">osf_create_project</span>(</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">title =</span> <span class="st">&quot;Political Identification and Gender: Re-examined&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">description =</span> <span class="st">&quot;A re-analysis of the original study&#39;s results.&quot;</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>)</span>
+<span id="cb7-5"><a href="#cb7-5"></a>my_project</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; # A tibble: 1 x 3</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt;   name                                             id    meta            </span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt;   &lt;chr&gt;                                            &lt;chr&gt; &lt;list&gt;          </span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt; 1 Political Identification and Gender: Re-examined kqy2p &lt;named list [3]&gt;</span></span></code></pre></div>
+<p>The GUID for this new project is <code>kqy2p</code>, but yours will be something different. You can check out the project on OSF by opening it’s URL (<code>https://www.osf.io/&lt;GUID&gt;</code>), or, more conveniently: <code>osf_open(my_project)</code>.</p>
+</div>
+<div id="adding-structure-with-components" class="section level3">
+<h3>Adding structure with components</h3>
+<p>A key organizational feature of OSF is the ability to augment a project’s structure with sub-projects, which are referred to as <em>components</em> on OSF. Like top-level projects, every component is assigned a unique URL and contains its own cloud-based storage bucket. They can also have different privacy settings from the parent project.</p>
+<p>We are going to create two nested <em>components</em>, one for the raw data and one for the analysis scripts.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>data_comp &lt;-<span class="st"> </span><span class="kw">osf_create_component</span>(my_project, <span class="dt">title =</span> <span class="st">&quot;Raw Data&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>script_comp &lt;-<span class="st"> </span><span class="kw">osf_create_component</span>(my_project, <span class="dt">title =</span> <span class="st">&quot;Analysis Scripts&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># verify the components were created</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co"># osf_open(my_project)</span></span></code></pre></div>
+<p>If you refresh the OSF project in your browser the <em>Components</em> widget should now contain two entries for each of our newly created components.</p>
+</div>
+<div id="uploading-files" class="section level3">
+<h3>Uploading files</h3>
+<p>Now that our project components are in place we can start to populate them with files. Let’s start with the csv file containing our raw data.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>data_file  &lt;-<span class="st"> </span><span class="kw">osf_upload</span>(my_project, <span class="dt">path =</span> <span class="st">&quot;raw_data.csv&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>data_file</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt; # A tibble: 1 x 3</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;   name         id                       meta            </span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;                    &lt;list&gt;          </span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; 1 raw_data.csv 5e3c4af3032a4d00dee71f02 &lt;named list [3]&gt;</span></span></code></pre></div>
+<p>Oh no! Instead of uploading <code>raw_data.csv</code> to the <em>Raw Data</em> component, we uploaded it to the parent project instead.</p>
+<p>Fear not. We can easily fix this contrived mistake by simply moving the file to its intended location.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>data_file &lt;-<span class="st"> </span><span class="kw">osf_mv</span>(data_file, <span class="dt">to =</span> data_comp)</span></code></pre></div>
+<p>Crisis averted. Now if you open <em>Raw Data</em> on OSF (<code>osf_open(data_comp)</code>), it should contain the csv file.</p>
+<p>Our next step is to upload the R scripts into the <em>Analysis Scripts</em> component. Rather than upload each file individually, we’ll take advantage of <code>osf_upload()</code>’s ability to handle multiple files/directories and use <code>list.files()</code> to identify all <code>.R</code> files in the working directory:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>r_files &lt;-<span class="st"> </span><span class="kw">osf_upload</span>(script_comp, <span class="dt">path =</span> <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&quot;.R$&quot;</span>))</span>
+<span id="cb11-2"><a href="#cb11-2"></a>r_files</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt;   name         id                       meta            </span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;                    &lt;list&gt;          </span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; 1 analyses.R   5e3c4af6f1369e01158aaf3b &lt;named list [3]&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; 2 cleaning.R   5e3c4af9032a4d00e8e70915 &lt;named list [3]&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; 3 precompile.R 5e3c4afaf1369e010e8acaf7 &lt;named list [3]&gt;</span></span></code></pre></div>
+</div>
+<div id="putting-it-all-together" class="section level3">
+<h3>Putting it all together</h3>
+<p>Finally, let’s repeat the process for the 2 <code>.docx</code> file containing the survey and accompanying data dictionary. This time we’ll use a more succinct approach that leverages pipes to create and populate the component in one block:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_project <span class="op">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="st">  </span><span class="kw">osf_create_component</span>(<span class="st">&quot;Research Materials&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="st">  </span><span class="kw">osf_upload</span>(<span class="dt">path =</span> <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.docx$&quot;</span>))</span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt; # A tibble: 2 x 3</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt;   name                 id                       meta            </span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt;   &lt;chr&gt;                &lt;chr&gt;                    &lt;list&gt;          </span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; 1 Data Dictionary.docx 5e3c4afef1369e01108ad708 &lt;named list [3]&gt;</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt; 2 Questionnaire.docx   5e3c4b00032a4d00ece6faab &lt;named list [3]&gt;</span></span></code></pre></div>
+<p>We can verify the project is now structured the way we wanted by listing the components we have under the main project.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">osf_ls_nodes</span>(my_project)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt;   name               id    meta            </span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt;   &lt;chr&gt;              &lt;chr&gt; &lt;list&gt;          </span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt; 1 Research Materials hvmpr &lt;named list [3]&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt; 2 Analysis Scripts   85tck &lt;named list [3]&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">#&gt; 3 Raw Data           mzq49 &lt;named list [3]&gt;</span></span></code></pre></div>
+<p>which gives us an <code>osf_tbl</code> with one row for each of the project’s components.</p>
+</div>
+<div id="updating-files" class="section level3">
+<h3>Updating files</h3>
+<p>OSF provides automatic and unlimited file versioning. Let’s see how this works with osfr. Make a small edit to your local copy of <code>cleaning.R</code> and save. Now, if we attempt to upload this new version to the <em>Analysis Scripts</em> component, osfr will throw a conflict error:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">osf_upload</span>(script_comp, <span class="dt">path =</span> <span class="st">&quot;cleaning.R&quot;</span>)</span></code></pre></div>
+<pre><code>Error: Can&#39;t upload file &#39;cleaning.R&#39;.
+  * A file with the same name already exists at the destination.
+  * Use the `conflicts` argument to avoid this error in the future.</code></pre>
+<p>As the error indicates, we need to use the <code>conflicts</code> argument to instruct <code>osf_upload()</code> how to handle the conflict. In this case, we want to overwrite the original copy with our new version:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">osf_upload</span>(script_comp, <span class="dt">path =</span> <span class="st">&quot;cleaning.R&quot;</span>, <span class="dt">conflicts =</span> <span class="st">&quot;overwrite&quot;</span>)</span></code></pre></div>
+<p>Learn more about file versioning on OSF <a href="https://help.osf.io/hc/en-us/articles/360019738694-File-Revisions-and-Version-Control">here</a>.</p>
+</div>
+<div id="sharing" class="section level3">
+<h3>Sharing</h3>
+<p>Remember, new OSF projects are <em>always</em> private by default. You can change this by opening the project’s settings page on OSF and making it public. See the following guides more information about OSF permissions and how to optionally generate a DOI so other can cite your project.</p>
+<ul>
+<li><a href="https://help.osf.io/hc/en-us/articles/360018981414-Control-Your-Privacy-Settings">Privacy Settings</a></li>
+<li><a href="https://help.osf.io/hc/en-us/categories/360001530614-Sharing-Projects">Sharing Projects</a></li>
+<li><a href="https://help.osf.io/hc/en-us/articles/360019931013-Create-DOIs">Generate DOIs</a></li>
+</ul>
+</div>
+</div>
+<div id="a-few-details-about-files-on-osf" class="section level2">
+<h2>A few details about files on OSF</h2>
+<p>On OSF, files can exist in projects, components, and/or directories. Files can be stored on <em>OSF’s Storage</em> or in another service that is connected to an OSF project (e.g. GitHub, Dropbox, or Google Drive). However, <code>osfr</code> currently only supports interacting with files on OSF Storage.</p>
+<p>We can download files from any public or private node that we have access to and can identify files to download in two different ways:</p>
+<ol style="list-style-type: decimal">
+<li><p>If we know where the file is located, but don’t remember its GUID, you can use the <code>osf_ls_files</code> function to filter by filename within a specified node and then pipe the results to <code>osf_download()</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>anes_project <span class="op">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="st">  </span><span class="kw">osf_ls_files</span>(<span class="dt">pattern =</span> ) <span class="op">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="st">  </span><span class="kw">osf_download</span>(<span class="dt">conflicts =</span> <span class="st">&quot;overwrite&quot;</span>)</span></code></pre></div></li>
+<li><p>For a public file that was referenced in a published article, you may already have the GUID, and so can retrieve the file directly before downloading it. For example, let’s download Daniel Laken’s helpful spreadsheet for calculating effect sizes (available from <a href="https://osf.io/vbdah/" class="uri">https://osf.io/vbdah/</a>).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">osf_retrieve_file</span>(<span class="st">&quot;vbdah&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="st">  </span><span class="kw">osf_download</span>(excel_file)</span></code></pre></div></li>
+</ol>
+</div>
+<div id="additional-resources" class="section level2">
+<h2>Additional resources</h2>
+<p>For more information on OSF and <code>osfr</code> check out:</p>
+<ul>
+<li><a href="https://osf.io">OSF</a></li>
+<li><a href="https://developer.osf.io">OSF API Documentation</a></li>
+<li><a href="https://osf.io/support/">OSF Support</a></li>
+<li><a href="https://github.com/ropensci/osfr">osfr GitHub Repository</a></li>
+</ul>
+<!-- links -->
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
