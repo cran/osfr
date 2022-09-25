@@ -1,7 +1,25 @@
+# osfr 0.2.9
+
+## Minor changes
+
+* tibble v3.0.0 is now the minimum required version
+
+## Fixes
+
+* Fixed bug preventing uploads directly to OSF directories that contained conflicting files (#121, #129)
+* Fixed pkgdown site build (#147)
+* Fixed downloading of files via GUIDs (#141, thanks @psanker)
+
+## Build and test infrastructure
+
+* Unit tests for single file uploads, html encoding, and basic node mechanics are now mocked with `vcr` (#145)
+* GitHub Actions is now used for continuous integration (#146)
+* brio is now used in tests for writing text to files so `\n` is used for line endings on Windows. This produces files with identical sizes on all platforms allowing vcr to match requests that include file sizes in the body (#146).
+
 # osfr 0.2.8
 
 * Initial CRAN release
-* Publication of accompanying paper in the [Journal of Open Source Software](http://joss.theoj.org/) that can be cited in papers using osfr, see `citation("osfr")` for details
+* Publication of accompanying paper in the [Journal of Open Source Software](https://joss.theoj.org/) that can be cited in papers using osfr, see `citation("osfr")` for details
 
 ## Minor changes
 
@@ -14,7 +32,7 @@
 
 ## Important changes
 
-osfr is now part of rOpenSci and the documentation website has moved to a new URL:  <https://docs.ropensci.org/osfr>.
+osfr is now part of rOpenSci and the documentation website has moved to a new URL:  <https://docs.ropensci.org/osfr/>.
 
 ## New features
 
@@ -127,5 +145,5 @@ previous package can be installed with the *remotes* package:
 remotes::install_github("ropensci/osfr@v0.1.1")
 ```
 
-See <https://docs.ropensci.org/osfr> for details about the new
+See <https://docs.ropensci.org/osfr/> for details about the new
 package.

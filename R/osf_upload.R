@@ -73,7 +73,7 @@
 #' # Modify the data file, upload version 2, and view it on OSF
 #' write.csv(subset(iris, Species != "setosa"), file = "iris.csv")
 #' project %>%
-#'   osf_upload("iris.csv", overwrite = TRUE) %>%
+#'   osf_upload("iris.csv", conflicts = "overwrite") %>%
 #'   osf_open()
 #' }
 #'
@@ -149,6 +149,15 @@ osf_upload.osf_tbl_file <-
 
   # inventory of files to upload and/or remote directories to create
   manifest <- map_rbind(.upload_manifest, path = path, recurse = recurse)
+
+  # if uploading to a directory we need to update the remote paths for files
+  if (inherits(dest, "osf_tbl_file")) {
+    manifest$remote_path <- ifelse(
+      manifest$type == "file",
+      file.path(dest$name, manifest$remote_path),
+      manifest$remote_path
+    )
+  }
 
   # retrieve remote destinations
   manifest <- .ulm_add_remote_dests(manifest, dest, verbose)
@@ -238,4 +247,3 @@ osf_upload.osf_tbl_file <-
 
   do.call("rbind", out)
 }
-

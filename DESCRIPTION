@@ -1,6 +1,6 @@
 Package: osfr
 Title: Interface to the 'Open Science Framework' ('OSF')
-Version: 0.2.8
+Version: 0.2.9
 Authors@R: c(
     person("Aaron", "Wolen",, "aaron@wolen.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2542-2202")),
@@ -16,24 +16,23 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-1642-628X")),
     person("Heidi", "Seibold",, "heidi.seibold@stat.uni-muenchen.de", role = "rev")
     )
-Description: An interface for interacting with 'OSF' (<https://osf.io>). 'osfr' 
+Description: An interface for interacting with 'OSF' (<https://osf.io>). 'osfr'
     enables you to access open research materials and data, or create and
     manage your own private or public projects.
 Depends: R (>= 3.1.0)
-Imports: crul (>= 0.7.4), jsonlite, stringi, purrr, tibble, rlang, fs
-        (>= 1.3.0), memoise, httr
+Imports: crul (>= 0.7.4), jsonlite, stringi, purrr, tibble (>= 3.0.0),
+        rlang, fs (>= 1.3.0), memoise, httr
 License: MIT + file LICENSE
-URL: https://docs.ropensci.org/osfr, https://github.com/ropensci/osfr
+URL: https://docs.ropensci.org/osfr/, https://github.com/ropensci/osfr
 BugReports: https://github.com/ropensci/osfr/issues
-LazyData: true
-Suggests: dplyr, logger, rprojroot, testthat, knitr, rmarkdown, lintr
-        (>= 2.0), covr, spelling
+Suggests: dplyr, logger, rprojroot, brio, testthat, knitr, rmarkdown,
+        lintr (>= 2.0), covr, spelling, vcr (>= 0.5)
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2020-02-17 16:30:20 UTC; aaronwolen
+Packaged: 2022-09-25 21:52:55 UTC; aaronwolen
 Author: Aaron Wolen [aut, cre] (<https://orcid.org/0000-0003-2542-2202>),
   Chris Hartgerink [aut] (<https://orcid.org/0000-0003-1050-6809>),
   Timothy York [ctb] (<https://orcid.org/0000-0003-4068-4286>),
@@ -44,4 +43,4 @@ Author: Aaron Wolen [aut, cre] (<https://orcid.org/0000-0003-2542-2202>),
   Heidi Seibold [rev]
 Maintainer: Aaron Wolen <aaron@wolen.com>
 Repository: CRAN
-Date/Publication: 2020-02-17 19:50:05 UTC
+Date/Publication: 2022-09-25 22:20:02 UTC
